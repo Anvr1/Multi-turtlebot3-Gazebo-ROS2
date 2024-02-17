@@ -34,12 +34,14 @@ TURTLEBOT3_MODEL = "burger"
 
 def generate_launch_description():
     use_sim_time = LaunchConfiguration('use_sim_time', default='true')
-    world_file_name = 'turtlebot3_tc_two_robots.world'
+    # world_file_name = 'turtlebot3_tc_two_robots.world'
+    world_file_name = 'warehouse.world'
     world = os.path.join(get_package_share_directory('turtlebot3_gazebo'), 'worlds', world_file_name)
     robot_desc_path = os.path.join(get_package_share_directory("turtlebot3_description"), "urdf", "turtlebot3_burger.urdf")
 
     entity_name_0="tb3_0"
     entity_name_1="tb3_1"
+    entity_name_2="tb3_2"
 
     return LaunchDescription([
         ExecuteProcess(
@@ -61,6 +63,15 @@ def generate_launch_description():
             name='robot_state_publisher',
             namespace=entity_name_1,
             parameters=[{'frame_prefix': entity_name_1+'/', 'use_sim_time': use_sim_time, 'robot_description': Command(['xacro ', robot_desc_path, ' robot_name:=', entity_name_1])}],
+            output="screen"
+        ),
+
+        Node(
+            package='robot_state_publisher',
+            executable='robot_state_publisher',
+            name='robot_state_publisher',
+            namespace=entity_name_2,
+            parameters=[{'frame_prefix': entity_name_2+'/', 'use_sim_time': use_sim_time, 'robot_description': Command(['xacro ', robot_desc_path, ' robot_name:=', entity_name_2])}],
             output="screen"
         )
 
